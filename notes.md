@@ -1,0 +1,11 @@
+## Basic NFA fragments
+• Single character: A  
+• $\epsilon$-transition: $\epsilon$  
+• Concatenation: AB  
+• Union: A | B  
+• Kleene-closure: A*
+
+## Syntactic sugar
+• A+ <=> AA*  
+• A? <=> A | $\epsilon$  
+• [0-9] <=> 0 | 1 | 2 | ... | 9
