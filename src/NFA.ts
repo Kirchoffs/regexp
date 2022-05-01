@@ -94,24 +94,23 @@ export function or(first: NFA, ...rest: Array<NFA>): NFA {
 }
 
 export function rep(fragment: NFA): NFA {
-    const inState = new State();
-    const outState = new State(true);
-
-    fragment.outState.accepting = false;
-
-    inState.addTransitionForSymbol(EPSILON, fragment.inState);
+    const inState = fragment.inState;
+    const outState = fragment.outState;
     inState.addTransitionForSymbol(EPSILON, outState);
-    fragment.outState.addTransitionForSymbol(EPSILON, outState);
-    outState.addTransitionForSymbol(EPSILON, fragment.inState);
-
-    return new NFA(inState, outState);
+    outState.addTransitionForSymbol(EPSILON, inState);
+    return fragment;
 }
 
 export function repOneOrMore(fragment: NFA): NFA {
-    const copied = copy(fragment);
-    return concat(copied, rep(fragment));
+    const inState = fragment.inState;
+    const outState = fragment.outState;
+    outState.addTransitionForSymbol(EPSILON, inState);
+    return fragment;
 }
 
 export function repOneOrZero(fragment: NFA): NFA {
-    return or(fragment, epsilon());
+    const inState = fragment.inState;
+    const outState = fragment.outState;
+    inState.addTransitionForSymbol(EPSILON, outState);
+    return fragment;
 }
