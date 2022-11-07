@@ -1,20 +1,105 @@
 import State from './State';
-import { EPSILON } from './constant';
+import { EPSILON, EPSILON_CLOSURE } from './constant';
 
 // NFA fragment
 // one input, one output
 export class NFA {
     inState: State;
     outState: State;
+    transitionsTable: Map<number, Map<string, Array<number>>>;
+    acceptingStates: Set<State>;
+    acceptingStateIds: Set<number>;
+    alphabet: Set<String>;
 
     constructor(inState: State, outState: State) {
         this.inState = inState;
         this.outState = outState;
         this.outState.accepting = true;
+        this.transitionsTable = null as any;
+        this.acceptingStates = null as any;
+        this.acceptingStateIds = null as any;
+        this.alphabet = null as any;
     }
 
     test(string: string): boolean {
         return this.inState.test(string);
+    }
+
+    getAlphabet(): Set<String> {
+        if (this.alphabet == null) {
+            this.alphabet = new Set();
+            const table = this.getTransitionTable();
+            for (const [_, transition] of table) {
+                for (const symbol of Array.from(transition.keys())) {
+                    this.alphabet.add(symbol);
+                }
+            }
+        }
+        return this.alphabet;
+    }
+
+    getAcceptingStates(): Set<State> {
+        if (this.acceptingStates == null) {
+            this.getTransitionTable();
+        }
+        return this.acceptingStates;
+    }
+
+    getAcceptingStateIds(): Set<number> {
+        if (this.acceptingStateIds == null) {
+            this.acceptingStateIds = new Set();
+            for (const acceptingState of this.getAcceptingStates()) {
+                this.acceptingStateIds.add(acceptingState.id);
+            }
+        }
+        return this.acceptingStateIds;
+    }
+
+    getTransitionTable(): Map<number, Map<string, Array<number>>> {
+        if (this.transitionsTable == null) {
+            this.transitionsTable = new Map();
+            this.acceptingStates = new Set();
+
+            const visited = new Set<State>();
+            const symbols = new Set<string>();
+
+            const visitState = (state: State) => {
+                if (visited.has(state)) {
+                    return;
+                }
+
+                visited.add(state);
+                state.id = visited.size;
+                this.transitionsTable.set(state.id, new Map());
+
+                if (state.accepting) {
+                    this.acceptingStates.add(state);
+                }
+
+                const transitions = state.getTransitions();
+
+                for (const [symbol, symbolTransitions] of transitions) {
+                    let combinedState = [];
+                    symbols.add(symbol);
+                    for (const nextState of symbolTransitions) {
+                        visitState(nextState);
+                        combinedState.push(nextState.id);
+                    }
+                    this.transitionsTable.get(state.id)!.set(symbol, combinedState);
+                }
+            }
+
+            visitState(this.inState);
+
+            visited.forEach((state: State) => {
+                this.transitionsTable.get(state.id)?.delete(EPSILON);
+                this.transitionsTable.get(state.id)?.set(
+                    EPSILON_CLOSURE, [...state.getEpsilonClosure()].map(s => s.id)
+                );
+            });
+        }
+
+        return this.transitionsTable;
     }
 }
 

@@ -98,4 +98,24 @@ describe('Basic test', () => {
         assert.equal(reQuestionMark.test('yy'), false);
         assert.equal(reQuestionMark.test('x'), false);
     });
+
+    it('Test epsilon transitions', () => {
+        const e = epsilon();
+        console.log(e.getTransitionTable());
+    });
+
+    it('Test char NFA transitions', () => {
+        const a = char('a');
+        console.log(a.getTransitionTable());
+    });
+
+    it('Test concat NFA transition', () => {
+        const re = concat(
+            char('a'),
+            char('b'),
+            char('c')
+        );
+    
+        console.log(re.getTransitionTable());
+    });
 });
