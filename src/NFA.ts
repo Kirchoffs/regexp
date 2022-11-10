@@ -9,7 +9,7 @@ export class NFA {
     transitionsTable: Map<number, Map<string, Array<number>>>;
     acceptingStates: Set<State>;
     acceptingStateIds: Set<number>;
-    alphabet: Set<String>;
+    alphabet: Set<string>;
 
     constructor(inState: State, outState: State) {
         this.inState = inState;
@@ -25,7 +25,7 @@ export class NFA {
         return this.inState.test(string);
     }
 
-    getAlphabet(): Set<String> {
+    getAlphabet(): Set<string> {
         if (this.alphabet == null) {
             this.alphabet = new Set();
             const table = this.getTransitionTable();
