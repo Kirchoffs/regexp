@@ -1,7 +1,7 @@
 import { NFA, char, epsilon, concat, or, rep, repOneOrMore, repOneOrZero } from "../src/NFA";
 import { assert } from "chai";
 
-describe('Basic test', () => {
+describe('Basic NFA test', () => {
     it('Test epsilon', () => {
         const e = epsilon();
         assert.equal(e.test(''), true);

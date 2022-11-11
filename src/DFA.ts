@@ -30,7 +30,6 @@ export class DFA {
             const dfaTable = new Map();
 
             const nfaTable = this.nfa.getTransitionTable();
-            const nfaStates = this.nfa.getAcceptingStates();
             const nfaStartState = this.nfa.inState;
             const nfaAcceptingStateIds = this.nfa.getAcceptingStateIds();
 
@@ -89,6 +88,28 @@ export class DFA {
     }
 
     remapStateForDfaTable(dfaTable: Map<string, Map<string, string>>, acceptingStateIdsByStr: Set<string>) {
-        return null as any;
+        this.transitionTable = new Map();
+        this.acceptingStateIds = new Set();
+        const stateMapping = new Map();
+
+        let newId = 0;
+        dfaTable.forEach((_, id) => {
+            stateMapping.set(id, newId);
+            if (acceptingStateIdsByStr.has(id)) {
+                this.acceptingStateIds.add(newId);
+            }
+            newId++;
+        })
+
+        dfaTable.forEach((transition, id) => {
+            const newTransition = new Map();
+
+            for (const symbol of this.alphabet) {
+                if (transition.has(symbol)) {
+                    newTransition.set(symbol, stateMapping.get(transition.get(symbol)));
+                }
+            }
+            this.transitionTable.set(stateMapping.get(id), newTransition);
+        })
     }
 }

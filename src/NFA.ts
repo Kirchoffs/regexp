@@ -31,7 +31,9 @@ export class NFA {
             const table = this.getTransitionTable();
             for (const [_, transition] of table) {
                 for (const symbol of Array.from(transition.keys())) {
-                    this.alphabet.add(symbol);
+                    if (symbol != EPSILON_CLOSURE) {
+                        this.alphabet.add(symbol);
+                    }
                 }
             }
         }
