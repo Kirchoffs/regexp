@@ -4,12 +4,14 @@ import { assert } from "chai";
 describe('Basic NFA test', () => {
     it('Test epsilon', () => {
         const e = epsilon();
+
         assert.equal(e.test(''), true);
         assert.equal(e.test('a'), false);
     });
 
     it('Test char NFA', () => {
         const a = char('a');
+
         assert.equal(a.test('a'), true);
         assert.equal(a.test(''), false);
         assert.equal(a.test('b'), false);
@@ -43,6 +45,7 @@ describe('Basic NFA test', () => {
 
     it('Test cleene closure', () => {
         const reSimple = rep(char('x'));
+
         assert.equal(reSimple.test(''), true);
         assert.equal(reSimple.test('x'), true);
         assert.equal(reSimple.test('xx'), true);
@@ -57,6 +60,7 @@ describe('Basic NFA test', () => {
                 char('b')
             )
         );
+
         assert.equal(reConcatCombined.test(''), true);
         assert.equal(reConcatCombined.test('ab'), true);
         assert.equal(reConcatCombined.test('abab'), true);
@@ -71,6 +75,7 @@ describe('Basic NFA test', () => {
             ),
             char('z')
         );
+
         assert.equal(reComplex.test(''), false);
         assert.equal(reComplex.test('z'), true);
         assert.equal(reComplex.test('x'), true);
@@ -86,6 +91,7 @@ describe('Basic NFA test', () => {
 
     it('Test derived regexp', () => {
         const rePlus = repOneOrMore(char('x'));
+
         assert.equal(rePlus.test(''), false);
         assert.equal(rePlus.test('x'), true);
         assert.equal(rePlus.test('xx'), true);
@@ -93,29 +99,10 @@ describe('Basic NFA test', () => {
         assert.equal(rePlus.test('xy'), false);
 
         const reQuestionMark = repOneOrZero(char('y'));
+
         assert.equal(reQuestionMark.test(''), true);
         assert.equal(reQuestionMark.test('y'), true);
         assert.equal(reQuestionMark.test('yy'), false);
         assert.equal(reQuestionMark.test('x'), false);
-    });
-
-    it('Test epsilon transitions', () => {
-        const e = epsilon();
-        console.log(e.getTransitionTable());
-    });
-
-    it('Test char NFA transitions', () => {
-        const a = char('a');
-        console.log(a.getTransitionTable());
-    });
-
-    it('Test concat NFA transition', () => {
-        const re = concat(
-            char('a'),
-            char('b'),
-            char('c')
-        );
-    
-        console.log(re.getTransitionTable());
     });
 });

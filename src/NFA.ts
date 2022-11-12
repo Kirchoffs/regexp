@@ -93,12 +93,12 @@ export class NFA {
 
             visitState(this.inState);
 
-            visited.forEach((state: State) => {
+            for (const state of visited) {
                 this.transitionsTable.get(state.id)?.delete(EPSILON);
                 this.transitionsTable.get(state.id)?.set(
                     EPSILON_CLOSURE, [...state.getEpsilonClosure()].map(s => s.id)
                 );
-            });
+            }
         }
 
         return this.transitionsTable;
@@ -111,8 +111,8 @@ function deepCopy(state: State, mapping: Map<State, State>): State {
     }
 
     const newState = new State();
-    for (let [key, nxtStates] of state.transitionsMap) {
-        for (let nxtState of nxtStates) {
+    for (const [key, nxtStates] of state.transitionsMap) {
+        for (const nxtState of nxtStates) {
             newState.addTransitionForSymbol(key, deepCopy(nxtState, mapping));
         }
     }
