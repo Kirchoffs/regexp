@@ -2,5 +2,6 @@
 ```
 >> npm install
 >> npm run test
->> npm run DFA-test
+>> npm run dfa-test
+>> npm run parser-test
 ```
