@@ -2,7 +2,6 @@
   "name": "regexp",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
     "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'tests/**/*.ts'",
     "dfa-test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'tests/**/DFA*.ts'",
@@ -11,14 +10,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Kirchoffs/RegExp.git"
+    "url": "git+https://github.com/Kirchoffs/regexp.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Kirchoffs/RegExp/issues"
+    "url": "https://github.com/Kirchoffs/regexp/issues"
   },
-  "homepage": "https://github.com/Kirchoffs/RegExp#readme",
+  "homepage": "https://github.com/Kirchoffs/regexp#readme",
   "devDependencies": {
     "@types/chai": "^4.3.1",
     "@types/mocha": "^9.1.1",
